@@ -11,7 +11,7 @@ export default function SubTitle(props) {
             <style jsx>{`
                 ${Tag} {
                     color: ${appConfig.theme.colors.neutrals['050']};
-                    fon-size: 24px;
+                    font-size: 24px;
                     font-weight: 300;
                 }
             `}</style>

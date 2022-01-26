@@ -1,9 +1,10 @@
-import GlobalStyle from "./Global/GlobalStyle"
-import Title from "./Components/Title"
-import SubTitle from "./Components/SubTitle"
+import Title from "./Components/Title";
+import SubTitle from "./Components/SubTitle";
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 
 import appConfig from '../config.json';
+import React from 'react';
+import { useRouter } from 'next/router';
 
 // function HomePage() {
 //     return (
@@ -17,11 +18,12 @@ import appConfig from '../config.json';
 // export default HomePage
 
 export default function HomePage() {
-    const usernameGitHub = 'miltoncsjunior';
+    const [usernameGitHub, setUsernameGitHub] = React.useState('miltoncsjunior');
+    const [imageGitHub, setImageGitHub] = React.useState(`https://github.com/${usernameGitHub}.png`);
+    const route = useRouter();
 
     return (
         <>
-            <GlobalStyle />
             <Box
                 styleSheet={{
                     display: 'flex',
@@ -52,6 +54,12 @@ export default function HomePage() {
                     {/* Formulário */}
                     <Box
                         as="form"
+                        onSubmit={
+                            function handleSubmit(event) {
+                                event.preventDefault();
+                                route.push('/chat');
+                            }
+                        }
                         styleSheet={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                             width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -64,6 +72,15 @@ export default function HomePage() {
                         </Text>
 
                         <TextField
+                            value={usernameGitHub}
+                            onChange={
+                                function handleChange(event) {
+                                    const valueInputed = event.target.value;
+
+                                    setUsernameGitHub(valueInputed);
+                                    setImageGitHub(`https://github.com/${valueInputed}.png`)
+                                }
+                            }
                             fullWidth
                             textFieldColors={{
                                 neutral: {
@@ -110,8 +127,8 @@ export default function HomePage() {
                                 borderRadius: '50%',
                                 marginBottom: '16px',
                             }}
-                            src={`https://github.com/${usernameGitHub}.png`}
 
+                            src={imageGitHub}
                         />
                         <Text
                             variant="body4"
