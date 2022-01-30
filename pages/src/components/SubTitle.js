@@ -1,4 +1,4 @@
-import appConfig from '../../config.json';
+import appConfig from '../../../config.json';
 
 export default function SubTitle(props) {
     const Text = props.children;

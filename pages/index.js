@@ -2,9 +2,8 @@ import { Box, Button, Image, Text, TextField } from '@skynexui/components';
 import { useRouter } from 'next/router';
 import React from 'react';
 import appConfig from '../config.json';
-import SubTitle from "./Components/SubTitle";
-import Title from "./Components/Title";
-
+import SubTitle from './src/components/SubTitle';
+import Title from './src/components/Title';
 
 // function HomePage() {
 //     return (
@@ -14,13 +13,12 @@ import Title from "./Components/Title";
 //         </div>
 //     );
 // }
-
 // export default HomePage
 
 export default function HomePage() {
+    const route = useRouter();
     const [usernameGitHub, setUsernameGitHub] = React.useState('miltoncsjunior');
     const [imageGitHub, setImageGitHub] = React.useState(`https://github.com/${usernameGitHub}.png`);
-    const route = useRouter();
 
     return (
         <>
@@ -57,7 +55,7 @@ export default function HomePage() {
                         onSubmit={
                             function handleSubmit(event) {
                                 event.preventDefault();
-                                route.push('/chat');
+                                route.push(`/chat?usernameGitHub=${usernameGitHub}`);
                             }
                         }
                         styleSheet={{

@@ -1,12 +1,26 @@
 import { Box, Button, Image, Text, TextField } from '@skynexui/components';
 import { createClient } from '@supabase/supabase-js';
+import { useRouter } from 'next/router';
 import React from 'react';
 import appConfig from '../config.json';
+import { ButtonSendSticker } from './src/components/ButtonSendSticker.js';
 
-// Create a single supabase client for interacting with your database
+import { Scrollbar } from "react-scrollbars-custom";
+
 const supabaseClient = createClient(appConfig.supabase.url, appConfig.supabase.anonkey);
 
+function liveMessages(addMessage) {
+    return supabaseClient
+        .from('mensagens')
+        .on('INSERT', (data) => {
+            addMessage(data.new);
+        })
+        .subscribe();
+}
+
 export default function Chat() {
+    const route = useRouter();
+    const usernameGitHub = route.query.usernameGitHub;
     const [mensagem, setMensagem] = React.useState('');
     const [mensagemList, setMensagemList] = React.useState([]);
 
@@ -17,11 +31,24 @@ export default function Chat() {
             .then(({ data }) => {
                 setMensagemList(data)
             });
+
+        liveMessages((newMessage) => {
+            setMensagemList((newListMessage) => {
+                return [
+                    newMessage,
+                    ...newListMessage,
+                ]
+            });
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        }
     }, []);
 
     function handleSubmit(text) {
         const objMensagem = {
-            de: 'miltoncsjunior',
+            de: usernameGitHub,
             texto: text,
         };
 
@@ -29,10 +56,7 @@ export default function Chat() {
             .from('mensagens')
             .insert([objMensagem])
             .then(({ data }) => {
-                setMensagemList([
-                    data[0],
-                    ...mensagemList,
-                ]);
+                // Manter data para disparar o evento de inserção ?
             });
 
         setMensagem('');
@@ -136,10 +160,16 @@ export default function Chat() {
                                             color: appConfig.theme.colors.neutrals[200],
                                         }}
                                     />
+                                    {/* CallBack */}
+                                    <ButtonSendSticker
+                                        onStickerClick={(sticker) => {
+                                            handleSubmit(':sticker: ' + sticker);
+                                        }}
+                                    />
                                 </Box>
                             </>
                         )
-                    };
+                    }
                 </Box>
             </Box>
         </Box>
@@ -183,69 +213,78 @@ function Header() {
 
 function MessageList(props) {
     return (
-        <Box
-            tag="ul"
-            styleSheet={{
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column-reverse',
-                flex: 1,
-                color: appConfig.theme.colors.neutrals["000"],
-                marginBottom: '16px',
-            }}
-        >
-            {props.messages.map((objMensagem) => {
-                return (
-                    <Text
-                        key={objMensagem.id}
-                        tag="li"
-                        styleSheet={
-                            {
-                                borderRadius: '5px',
-                                padding: '6px',
-                                marginBottom: '12px',
-                                hover: {
-                                    backgroundColor: appConfig.theme.colors.neutrals[700],
-                                }
-                            }
-                        }
-                    >
-                        <Box
+        <Scrollbar universal>
+            <Box
+                tag="ul"
+                styleSheet={{
+                    display: 'flex',
+                    flexDirection: 'column-reverse',
+                    flex: 1,
+                    color: appConfig.theme.colors.neutrals["000"],
+                    marginBottom: '16px',
+                }}
+            >
+                {props.messages.map((objMensagem) => {
+                    return (
+                        <Text
+                            key={objMensagem.id}
+                            tag="li"
                             styleSheet={
                                 {
-                                    marginBottom: '8px',
-                                    display: 'flex'
+                                    borderRadius: '5px',
+                                    padding: '6px',
+                                    marginBottom: '12px',
+                                    hover: {
+                                        backgroundColor: appConfig.theme.colors.neutrals[700],
+                                    }
                                 }
                             }
                         >
-                            <Image
-                                styleSheet={{
-                                    width: '20px',
-                                    height: '20px',
-                                    borderRadius: '50%',
-                                    display: 'inline-block',
-                                    marginRight: '8px',
-                                }}
-                                src={`https://github.com/${objMensagem.de}.png`}
-                            />
-                            <Text tag="strong">
-                                {objMensagem.de}
-                            </Text>
-                            <Text
-                                styleSheet={{
-                                    fontSize: '10px',
-                                    marginLeft: '8px',
-                                    color: appConfig.theme.colors.neutrals[300],
-                                }}
-                                tag="span"
+                            <Box
+                                styleSheet={
+                                    {
+                                        marginBottom: '8px',
+                                        display: 'flex'
+                                    }
+                                }
                             >
-                                {(new Date().toLocaleDateString())}
-                            </Text>
-                        </Box>
-                        {objMensagem.texto}
-                    </Text>
-                )
-            })}
-        </Box>
+                                <Image
+                                    styleSheet={{
+                                        width: '20px',
+                                        height: '20px',
+                                        borderRadius: '50%',
+                                        display: 'inline-block',
+                                        marginRight: '8px',
+                                    }}
+                                    src={`https://github.com/${objMensagem.de}.png`}
+                                />
+                                <Text tag="strong">
+                                    {objMensagem.de}
+                                </Text>
+                                <Text
+                                    styleSheet={{
+                                        fontSize: '10px',
+                                        marginLeft: '8px',
+                                        color: appConfig.theme.colors.neutrals[300],
+                                    }}
+                                    tag="span"
+                                >
+                                    {(new Date().toLocaleDateString())}
+                                </Text>
+                            </Box>
+                            {/* [Declarativo] */}
+                            {objMensagem.texto.startsWith(':sticker:')
+                                ? (
+                                    <Image src={objMensagem.texto.replace(':sticker:', '')} />
+                                )
+                                : (
+                                    objMensagem.texto
+                                )
+                            }
+                        </Text>
+                    )
+                })}
+            </Box>
+        </Scrollbar >
     )
 }
