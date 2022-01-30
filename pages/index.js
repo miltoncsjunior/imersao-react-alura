@@ -1,10 +1,10 @@
-import Title from "./Components/Title";
-import SubTitle from "./Components/SubTitle";
-import { Box, Button, Text, TextField, Image } from '@skynexui/components';
-
-import appConfig from '../config.json';
-import React from 'react';
+import { Box, Button, Image, Text, TextField } from '@skynexui/components';
 import { useRouter } from 'next/router';
+import React from 'react';
+import appConfig from '../config.json';
+import SubTitle from "./Components/SubTitle";
+import Title from "./Components/Title";
+
 
 // function HomePage() {
 //     return (
@@ -122,14 +122,13 @@ export default function HomePage() {
                             minHeight: '240px',
                         }}
                     >
-                        <Image
+                        {usernameGitHub.length > 2 && (<Image
                             styleSheet={{
                                 borderRadius: '50%',
                                 marginBottom: '16px',
                             }}
-
-                            src={imageGitHub}
-                        />
+                            src={`https://github.com/${usernameGitHub}.png`}
+                        />)}
                         <Text
                             variant="body4"
                             styleSheet={{
