@@ -1,5 +1,6 @@
 import { Box, Button, Image, Text } from '@skynexui/components';
 import React from 'react';
+import { Scrollbar } from "react-scrollbars-custom";
 import appConfig from '../../../config.json';
 
 export default function ButtonSendSticker(props) {
@@ -60,41 +61,43 @@ export default function ButtonSendSticker(props) {
                     >
                         Stickers
                     </Text>
-                    <Box
-                        tag="ul"
-                        styleSheet={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            justifyContent: 'space-between',
-                            flex: 1,
-                            paddingTop: '16px',
-                        }}
-                    >
-                        {appConfig.stickers.map((sticker) => (
-                            <Text
-                                onClick={() => {
-                                    // console.log('[DENTRO DO COMPONENTE] Clicou no sticker:', sticker);
-                                    if (Boolean(props.onStickerClick)) {
-                                        props.onStickerClick(sticker);
-                                    }
-                                }}
-                                tag="li" key={sticker}
-                                styleSheet={{
-                                    width: '50%',
-                                    borderRadius: '5px',
-                                    padding: '10px',
-                                    focus: {
-                                        backgroundColor: appConfig.theme.colors.neutrals[600],
-                                    },
-                                    hover: {
-                                        backgroundColor: appConfig.theme.colors.neutrals[600],
-                                    }
-                                }}
-                            >
-                                <Image src={sticker} />
-                            </Text>
-                        ))}
-                    </Box>
+                    <Scrollbar>
+                        <Box
+                            tag="ul"
+                            styleSheet={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                justifyContent: 'space-between',
+                                flex: 1,
+                                paddingTop: '16px',
+                            }}
+                        >
+                            {appConfig.stickers.map((sticker) => (
+                                <Text
+                                    onClick={() => {
+                                        // console.log('[DENTRO DO COMPONENTE] Clicou no sticker:', sticker);
+                                        if (Boolean(props.onStickerClick)) {
+                                            props.onStickerClick(sticker);
+                                        }
+                                    }}
+                                    tag="li" key={sticker}
+                                    styleSheet={{
+                                        width: '50%',
+                                        borderRadius: '5px',
+                                        padding: '10px',
+                                        focus: {
+                                            backgroundColor: appConfig.theme.colors.neutrals[600],
+                                        },
+                                        hover: {
+                                            backgroundColor: appConfig.theme.colors.neutrals[600],
+                                        }
+                                    }}
+                                >
+                                    <Image src={sticker} />
+                                </Text>
+                            ))}
+                        </Box>
+                    </Scrollbar>
                 </Box>
             )}
         </Box>

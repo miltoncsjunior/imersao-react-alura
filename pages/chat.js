@@ -2,10 +2,10 @@ import { Box, Button, Image, Text, TextField } from '@skynexui/components';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/router';
 import React from 'react';
-import appConfig from '../config.json';
-import { ButtonSendSticker } from './src/components/ButtonSendSticker.js';
-
 import { Scrollbar } from "react-scrollbars-custom";
+import appConfig from '../config.json';
+import ButtonSendSticker from './src/components/ButtonSendSticker';
+
 
 const supabaseClient = createClient(appConfig.supabase.url, appConfig.supabase.anonkey);
 
@@ -213,7 +213,7 @@ function Header() {
 
 function MessageList(props) {
     return (
-        <Scrollbar universal>
+        <Scrollbar>
             <Box
                 tag="ul"
                 styleSheet={{
