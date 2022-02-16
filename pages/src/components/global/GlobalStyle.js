@@ -13,30 +13,32 @@ export default function GlobalStyle(props) {
                 box-sizing: border-box;
                 list-style: none;
             }
+
+                        /* ===== Scrollbar CSS ===== */
+            /* Firefox */
+            * {
+                scrollbar-width: thin;
+                scrollbar-color: ${Color} ${Color};
+            }
+
+            /* Chrome, Edge, and Safari */
+            *::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            *::-webkit-scrollbar-track {
+                background: ${Color},
+            }
+
+            *::-webkit-scrollbar-thumb {
+                background-color: ${Color};
+                border-radius: 10px;
+                border: none;
+            }
+
             body {
                 font-family: 'Open-Sans', sans-serif;
             }
-/* ===== Scrollbar CSS ===== */
-  /* Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: ${Color} ${Color};
-  }
-
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  *::-webkit-scrollbar-track {
-    background: ${Color},
-  }
-
-  *::-webkit-scrollbar-thumb {
-    background-color: ${Color};
-    border-radius: 10px;
-    border: none;
-  }
 
             /* App fit Height*/
             html, body, #__next {
