@@ -2,7 +2,6 @@ import { Box, Button, Image, Text, TextField } from '@skynexui/components';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Scrollbar } from "react-scrollbars-custom";
 import appConfig from '../config.json';
 import ButtonSendSticker from './src/components/ButtonSendSticker';
 
@@ -213,78 +212,77 @@ function Header() {
 
 function MessageList(props) {
     return (
-        <Scrollbar>
-            <Box
-                tag="ul"
-                styleSheet={{
-                    display: 'flex',
-                    flexDirection: 'column-reverse',
-                    flex: 1,
-                    color: appConfig.theme.colors.neutrals["000"],
-                    marginBottom: '16px',
-                }}
-            >
-                {props.messages.map((objMensagem) => {
-                    return (
-                        <Text
-                            key={objMensagem.id}
-                            tag="li"
+        <Box
+            tag="ul"
+            styleSheet={{
+                overflow: 'auto',
+                display: 'flex',
+                flexDirection: 'column-reverse',
+                flex: 1,
+                color: appConfig.theme.colors.neutrals["000"],
+                marginBottom: '16px',
+            }}
+        >
+            {props.messages.map((objMensagem) => {
+                return (
+                    <Text
+                        key={objMensagem.id}
+                        tag="li"
+                        styleSheet={
+                            {
+                                borderRadius: '5px',
+                                padding: '6px',
+                                marginBottom: '12px',
+                                hover: {
+                                    backgroundColor: appConfig.theme.colors.neutrals[700],
+                                }
+                            }
+                        }
+                    >
+                        <Box
                             styleSheet={
                                 {
-                                    borderRadius: '5px',
-                                    padding: '6px',
-                                    marginBottom: '12px',
-                                    hover: {
-                                        backgroundColor: appConfig.theme.colors.neutrals[700],
-                                    }
+                                    marginBottom: '8px',
+                                    display: 'flex'
                                 }
                             }
                         >
-                            <Box
-                                styleSheet={
-                                    {
-                                        marginBottom: '8px',
-                                        display: 'flex'
-                                    }
-                                }
+                            <Image
+                                styleSheet={{
+                                    width: '20px',
+                                    height: '20px',
+                                    borderRadius: '50%',
+                                    display: 'inline-block',
+                                    marginRight: '8px',
+                                }}
+                                src={`https://github.com/${objMensagem.de}.png`}
+                            />
+                            <Text tag="strong">
+                                {objMensagem.de}
+                            </Text>
+                            <Text
+                                styleSheet={{
+                                    fontSize: '10px',
+                                    marginLeft: '8px',
+                                    color: appConfig.theme.colors.neutrals[300],
+                                }}
+                                tag="span"
                             >
-                                <Image
-                                    styleSheet={{
-                                        width: '20px',
-                                        height: '20px',
-                                        borderRadius: '50%',
-                                        display: 'inline-block',
-                                        marginRight: '8px',
-                                    }}
-                                    src={`https://github.com/${objMensagem.de}.png`}
-                                />
-                                <Text tag="strong">
-                                    {objMensagem.de}
-                                </Text>
-                                <Text
-                                    styleSheet={{
-                                        fontSize: '10px',
-                                        marginLeft: '8px',
-                                        color: appConfig.theme.colors.neutrals[300],
-                                    }}
-                                    tag="span"
-                                >
-                                    {(new Date().toLocaleDateString())}
-                                </Text>
-                            </Box>
-                            {/* [Declarativo] */}
-                            {objMensagem.texto.startsWith(':sticker:')
-                                ? (
-                                    <Image src={objMensagem.texto.replace(':sticker:', '')} />
-                                )
-                                : (
-                                    objMensagem.texto
-                                )
-                            }
-                        </Text>
-                    )
-                })}
-            </Box>
-        </Scrollbar >
+                                {(new Date().toLocaleDateString())}
+                            </Text>
+                        </Box>
+                        {/* [Declarativo] */}
+                        {objMensagem.texto.startsWith(':sticker:')
+                            ? (
+                                <Image src={objMensagem.texto.replace(':sticker:', '')} />
+                            )
+                            : (
+                                objMensagem.texto
+                            )
+                        }
+                    </Text>
+                )
+            })}
+        </Box>
     )
 }
